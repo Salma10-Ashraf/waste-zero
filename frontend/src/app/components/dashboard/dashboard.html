@@ -1,0 +1,558 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#overview">
+      <span class="brand-icon">✳</span>
+      <span>
+        <strong>Waste Zero</strong>
+        <small>SMART FOOD MANAGEMENT</small>
+      </span>
+    </a>
+
+    <div class="nav-label">WORKSPACE</div>
+
+    <nav class="navigation">
+      <a class="nav-link active" href="#overview">
+        <span class="nav-icon">▦</span>
+        <span>Overview</span>
+        <span class="nav-indicator"></span>
+      </a>
+      <a class="nav-link" href="#forecast">
+        <span class="nav-icon">↗</span>
+        <span>Demand Forecast</span>
+      </a>
+      <a class="nav-link" href="#analytics">
+        <span class="nav-icon">▥</span>
+        <span>Waste Analytics</span>
+      </a>
+      <a class="nav-link" href="#predictions">
+        <span class="nav-icon">◷</span>
+        <span>Prediction History</span>
+      </a>
+      <a class="nav-link" routerLink="/menu-management">
+        <span class="nav-icon">☷</span>
+        <span>Menu Management</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-note">
+      <div class="note-icon">✦</div>
+      <strong>Every meal matters.</strong>
+      <p>Make smarter decisions, reduce food waste, and protect your resources.</p>
+      <div class="note-progress"><span></span></div>
+      <small>SMARTER FOOD. BETTER FUTURE.</small>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="avatar">LQ</div>
+      <div class="profile-copy">
+        <strong>Restaurant Team</strong>
+        <small>لوقمة ولقيمة</small>
+      </div>
+      <span class="profile-menu">•••</span>
+    </div>
+  </aside>
+
+  <main class="main-content" id="overview">
+    <header class="topbar">
+      <div class="breadcrumb">
+        <span>Workspace</span>
+        <span>/</span>
+        <strong>Overview</strong>
+      </div>
+
+      <div class="topbar-actions">
+        <span class="live-status"><i></i> System connected</span>
+        <div class="top-avatar">LQ</div>
+      </div>
+    </header>
+
+    <section class="welcome-section">
+      <div>
+        <div class="eyebrow"><span></span> SMART FOOD OPERATIONS</div>
+        <h1>Good evening, <span>Restaurant Team.</span></h1>
+        <p class="welcome-copy">
+          Make every ingredient count. Here is your food demand overview.
+        </p>
+      </div>
+
+      <div class="date-chip">
+        <span class="calendar-icon">▦</span>
+        <span>
+          <small>REPORT DATE</small>
+          <strong>{{ today | date:'EEE, dd MMM yyyy' }}</strong>
+        </span>
+      </div>
+    </section>
+
+    <div class="error-banner" *ngIf="errorMessage">
+      <span>!</span>
+      {{ errorMessage }}
+    </div>
+
+    <section class="kpi-grid">
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Total Predictions</span>
+          <span class="kpi-icon icon-green">↗</span>
+        </div>
+        <div class="kpi-value">
+          {{ analyticsSummary?.total_predictions ?? 0 | number }}
+        </div>
+        <div class="kpi-bottom">
+          <span class="mini-dot green-dot"></span>
+          <span>Saved prediction records</span>
+        </div>
+        <div class="kpi-decoration decoration-green"></div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Recorded Waste</span>
+          <span class="kpi-icon icon-blue">▤</span>
+        </div>
+        <div class="kpi-value">
+          {{ analyticsSummary?.total_waste ?? 0 | number }}
+          <span class="value-unit">portions</span>
+        </div>
+        <div class="kpi-bottom">
+          <span class="mini-dot blue-dot"></span>
+          <span>Total recorded leftovers</span>
+        </div>
+        <div class="kpi-decoration decoration-blue"></div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Estimated Financial Loss</span>
+          <span class="kpi-icon icon-orange">EGP</span>
+        </div>
+        <div class="kpi-value">
+          {{ analyticsSummary?.total_loss_cost ?? 0 | number:'1.0-2' }}
+          <span class="value-unit">EGP</span>
+        </div>
+        <div class="kpi-bottom">
+          <span class="mini-dot orange-dot"></span>
+          <span>Estimated cost of recorded waste</span>
+        </div>
+        <div class="kpi-decoration decoration-orange"></div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Demand Predictions</span>
+          <span class="kpi-icon icon-purple">⌁</span>
+        </div>
+        <div class="kpi-value">
+          {{ analyticsSummary?.demand_predictions ?? 0 | number }}
+        </div>
+        <div class="kpi-bottom">
+          <span class="mini-dot purple-dot"></span>
+          <span>Saved demand forecasts</span>
+        </div>
+        <div class="kpi-decoration decoration-purple"></div>
+      </article>
+    </section>
+
+    <section class="section-heading" id="forecast">
+      <div>
+        <span class="section-kicker">PREDICTION ENGINE</span>
+        <h2>Demand Forecast</h2>
+        <p>Estimate demand before preparing your next batch.</p>
+      </div>
+      <span class="section-badge"><span></span> ML POWERED</span>
+    </section>
+
+    <section class="workspace-grid">
+      <article class="panel prediction-panel">
+        <div class="panel-header">
+          <div class="panel-heading-icon">✳</div>
+          <div>
+            <h3>Generate a prediction</h3>
+            <p>Choose a menu item and enter your preparation plan.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field-group">
+            <label for="category">MENU CATEGORY</label>
+            <select
+              id="category"
+              [(ngModel)]="selectedCategory"
+              (ngModelChange)="onCategoryChange()"
+              [disabled]="menuLoading">
+              <option value="">Select a category</option>
+              <option
+                *ngFor="let category of menuCategories"
+                [value]="category">
+                {{ category }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="menuItem">MENU ITEM</label>
+            <select
+              id="menuItem"
+              [(ngModel)]="selectedItemId"
+              (ngModelChange)="onItemChange()"
+              [disabled]="!selectedCategory || menuLoading">
+              <option [ngValue]="null">Select a menu item</option>
+              <option
+                *ngFor="let item of availableItems"
+                [ngValue]="item.item_id">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="price">UNIT PRICE</label>
+            <div class="input-with-suffix">
+              <input id="price" type="number" [value]="price" readonly>
+              <span>EGP</span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="prepared">PREPARED QUANTITY</label>
+            <div class="input-with-suffix">
+              <input
+                id="prepared"
+                type="number"
+                min="0"
+                step="1"
+                [(ngModel)]="prepared"
+                placeholder="e.g. 50">
+              <span>PORTIONS</span>
+            </div>
+          </div>
+        </div>
+
+        <label class="promotion-toggle">
+          <span class="toggle-copy">
+            <span class="toggle-icon">%</span>
+            <span>
+              <strong>Promotion is active</strong>
+              <small>Account for a promotion when estimating demand</small>
+            </span>
+          </span>
+          <input type="checkbox" [(ngModel)]="promotion">
+          <span class="toggle-track"></span>
+        </label>
+
+        <div class="form-actions">
+          <button class="btn-secondary" type="button" (click)="onReset()">
+            Reset
+          </button>
+          <button
+            class="btn-primary"
+            type="button"
+            (click)="onPredict()"
+            [disabled]="loading || menuLoading">
+            <span *ngIf="!loading">Generate forecast <span>↗</span></span>
+            <span *ngIf="loading" class="button-loading">Calculating...</span>
+          </button>
+        </div>
+
+        <div class="inline-error" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+      </article>
+
+      <article class="panel insight-panel">
+        <div class="panel-header">
+          <div>
+            <span class="section-kicker">SMART INSIGHTS</span>
+            <h3>Forecast results</h3>
+          </div>
+          <span class="result-status" *ngIf="predictionResult">READY</span>
+        </div>
+
+        <ng-container *ngIf="predictionResult as result; else emptyForecast">
+          <div class="result-item">
+            <span class="result-item-icon">✳</span>
+            <div>
+              <small>SELECTED MENU ITEM</small>
+              <strong>{{ result.item_name }}</strong>
+            </div>
+          </div>
+
+          <div class="forecast-number">
+            <div>
+              <small>EXPECTED DEMAND</small>
+              <div class="big-number">
+                {{ result.predicted_demand | number:'1.0-0' }}
+                <span>portions</span>
+              </div>
+            </div>
+            <span class="forecast-arrow">↗</span>
+          </div>
+
+          <div class="result-metrics">
+            <div>
+              <span class="metric-marker surplus-marker"></span>
+              <small>Potential surplus</small>
+              <strong>{{ result.potential_excess_quantity | number }}</strong>
+            </div>
+            <div>
+              <span class="metric-marker shortage-marker"></span>
+              <small>Potential shortage</small>
+              <strong>{{ result.potential_shortage_quantity | number }}</strong>
+            </div>
+          </div>
+
+          <div class="recommendation-box">
+            <span class="recommendation-icon">✦</span>
+            <div>
+              <strong>Smart recommendation</strong>
+              <p>{{ result.recommendation }}</p>
+            </div>
+          </div>
+
+          <p class="data-note">{{ result.data_note }}</p>
+        </ng-container>
+
+        <ng-template #emptyForecast>
+          <div class="empty-forecast">
+            <div class="empty-illustration">✳</div>
+            <h4>Your next smart decision starts here.</h4>
+            <p>Select a menu item and generate a forecast to see estimated demand and preparation insights.</p>
+            <span class="empty-tag">AI-ASSISTED PLANNING</span>
+          </div>
+        </ng-template>
+      </article>
+    </section>
+
+    <section class="section-heading analytics-heading" id="analytics">
+      <div>
+        <span class="section-kicker">PERFORMANCE OVERVIEW</span>
+        <h2>Waste Analytics</h2>
+        <p>Understand recorded waste and its estimated financial impact.</p>
+      </div>
+      <span class="section-badge neutral-badge">DATABASE SUMMARY</span>
+    </section>
+
+    <section class="analytics-grid">
+      <article class="panel chart-panel">
+        <div class="panel-header">
+          <div>
+            <h3>Recorded waste overview</h3>
+            <p>Waste quantities and estimated loss from saved records.</p>
+          </div>
+          <span class="chart-icon">▥</span>
+        </div>
+
+        <div class="analytics-summary-list" *ngIf="analyticsSummary as summary">
+          <div class="analytics-summary-row">
+            <span>Total recorded waste</span>
+            <strong>{{ summary.total_waste | number }} portions</strong>
+          </div>
+          <div class="analytics-summary-row">
+            <span>Estimated financial loss</span>
+            <strong>{{ summary.total_loss_cost | number:'1.0-2' }} EGP</strong>
+          </div>
+          <div class="analytics-summary-row">
+            <span>Demand forecasts saved</span>
+            <strong>{{ summary.demand_predictions | number }}</strong>
+          </div>
+        </div>
+
+        <div
+          class="surplus-section"
+          *ngIf="analyticsSummary?.surplus_by_item?.length">
+
+          <div class="surplus-section-header">
+            <div>
+              <h4>Potential surplus by menu item</h4>
+              <p>Items ranked by their estimated excess quantity.</p>
+            </div>
+            <span class="surplus-count">
+              {{ analyticsSummary?.surplus_by_item?.length }} items
+            </span>
+          </div>
+
+          <div class="surplus-list">
+            <div
+              class="surplus-row"
+              *ngFor="let item of analyticsSummary?.surplus_by_item">
+
+              <div class="surplus-row-info">
+                <div class="surplus-item-name">
+                  <span class="table-item-icon">✳</span>
+                  <strong>{{ item.item_name }}</strong>
+                </div>
+
+                <div class="surplus-item-meta">
+                  {{ item.prediction_count }}
+                  {{ item.prediction_count === 1 ? 'prediction' : 'predictions' }}
+                </div>
+              </div>
+
+              <div class="surplus-quantity">
+                {{ item.potential_excess_quantity | number }}
+                <span>portions</span>
+              </div>
+
+              <div
+                class="surplus-track"
+                role="progressbar"
+                [attr.aria-valuenow]="item.potential_excess_quantity"
+                [attr.aria-valuemin]="0"
+                [attr.aria-valuemax]="item.potential_excess_quantity > 0 ? item.potential_excess_quantity : 1">
+
+                <div
+                  class="surplus-fill"
+                  [style.width.%]="getSurplusBarWidth(item.potential_excess_quantity)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="data-note">
+            These quantities are estimated potential surplus from saved predictions,
+            not confirmed physical food waste.
+          </p>
+        </div>
+
+        <div class="chart-empty" *ngIf="!analyticsSummary && !analyticsLoading">
+          <span>▥</span>
+          <strong>No analytics available</strong>
+          <p>Check the backend connection and refresh the data.</p>
+        </div>
+
+        <div class="chart-empty" *ngIf="analyticsLoading">
+          <strong>Loading analytics...</strong>
+        </div>
+
+        <p class="data-note">
+          Figures are based on records saved by the backend. Demand surplus is an estimate, not confirmed physical waste.
+        </p>
+      </article>
+
+      <article class="panel impact-panel">
+        <div class="impact-top">
+          <span class="impact-symbol">✳</span>
+          <span class="impact-label">WASTE ZERO INSIGHT</span>
+        </div>
+        <h3>Plan smarter.<br><span>Waste less.</span></h3>
+        <p>
+          Use demand estimates as a planning guide, then compare them with actual sales and leftovers.
+        </p>
+
+        <div class="impact-stat">
+          <div>
+            <small>Demand forecasts saved</small>
+            <strong>{{ analyticsSummary?.demand_predictions ?? 0 | number }}</strong>
+            <span>forecast records</span>
+          </div>
+          <span class="impact-stat-icon">↗</span>
+        </div>
+
+        <div class="impact-foot">
+          <span class="impact-leaf">✳</span>
+          Better planning starts with better data.
+        </div>
+      </article>
+    </section>
+
+    <section class="section-heading history-heading" id="predictions">
+      <div>
+        <span class="section-kicker">YOUR RECENT ACTIVITY</span>
+        <h2>Prediction History</h2>
+        <p>Review the latest demand forecasts and potential surplus or shortage saved in your database.</p>
+      </div>
+      <button
+        class="btn-secondary refresh-button"
+        type="button"
+        (click)="loadPredictionHistory(); loadAnalytics()"
+        [disabled]="historyLoading || analyticsLoading">
+        <span *ngIf="!historyLoading && !analyticsLoading">↻ Refresh data</span>
+        <span *ngIf="historyLoading || analyticsLoading">Refreshing...</span>
+      </button>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="history-toolbar">
+        <div class="history-count">
+          <span class="count-dot"></span>
+          {{ historyList.length }} records loaded
+        </div>
+
+        <div class="search-box">
+          <span>⌕</span>
+          <input
+            type="search"
+            [(ngModel)]="searchQuery"
+            placeholder="Search menu items...">
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>MENU ITEM</th>
+              <th>PREPARED</th>
+              <th>EXPECTED DEMAND</th>
+              <th>POTENTIAL SURPLUS</th>
+              <th>POTENTIAL SHORTAGE</th>
+              <th>RECORDED AT</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of filteredHistory">
+              <td>
+                <div class="table-item">
+                  <span class="table-item-icon">✳</span>
+                  <strong>{{ item.itemName }}</strong>
+                </div>
+              </td>
+              <td>{{ item.prepared | number }}</td>
+              <td>
+                <span class="demand-pill">
+                  {{ item.expectedDemand | number:'1.0-0' }}
+                </span>
+              </td>
+              <td>
+                <span class="quantity-pill surplus-pill">
+                  {{ item.excess | number }}
+                </span>
+              </td>
+              <td>
+                <span class="quantity-pill shortage-pill">
+                  {{ item.shortage | number }}
+                </span>
+              </td>
+              <td class="time-cell">{{ item.time }}</td>
+            </tr>
+
+            <tr *ngIf="filteredHistory.length === 0">
+              <td colspan="6">
+                <div class="table-empty">
+                  <span>◷</span>
+                  <strong>{{ searchQuery ? 'No matching predictions' : 'No prediction records yet' }}</strong>
+                  <p>
+                    {{ searchQuery
+                      ? 'Try a different search term.'
+                      : 'Your saved predictions will appear here after your first forecast.' }}
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="history-footer">
+        <span>Showing up to 100 most recent records</span>
+        <span>Powered by Waste Zero <b>✳</b></span>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>© {{ today | date:'yyyy' }} Waste Zero · Smart Food Management</span>
+      <span>Built for a more sustainable kitchen <b>✳</b></span>
+    </footer>
+  </main>
+</div>
