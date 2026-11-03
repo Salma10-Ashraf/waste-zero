@@ -1,1 +1,186 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+:root {
+  --primary-dark: #0f2a1d;
+  --primary-green: #1b4d3e;
+  --accent-orange: #e85d04;
+  --bg-cream: #fbf9f4;
+  --card-bg: #ffffff;
+  --text-main: #2b2b2b;
+  --text-muted: #6c757d;
+  --border-color: #e2ded4;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Cairo', sans-serif;
+}
+
+body {
+  background-color: var(--bg-cream);
+  color: var(--text-main);
+  direction: rtl;
+  text-align: right;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background-color: var(--primary-dark);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+}
+
+.logo-area h2 {
+  color: #f4a261;
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 0.2rem;
+}
+
+.logo-area p {
+  font-size: 0.85rem;
+  color: #a3b19b;
+}
+
+.nav-links {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.nav-links button {
+  background: transparent;
+  border: none;
+  color: #c2c5cc;
+  padding: 0.9rem 1rem;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-links button:hover, .nav-links button.active {
+  background-color: var(--accent-orange);
+  color: #fff;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  color: var(--primary-green);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 5px; height: 100%;
+  background-color: var(--accent-orange);
+}
+
+.stat-card h3 {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.stat-card .value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--primary-green);
+}
+
+.card-box {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+}
+
+.card-box h2 {
+  font-size: 1.3rem;
+  color: var(--primary-green);
+  margin-bottom: 1.2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: right;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: #f4f1ea;
+  color: var(--primary-green);
+}
+
+input, select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  background-color: #fff;
+}
+
+button.btn-primary {
+  background-color: var(--accent-orange);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}

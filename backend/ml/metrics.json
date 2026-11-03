@@ -1,0 +1,9 @@
+{
+    "data_type": "synthetic_demo_data",
+    "total_rows": 1800,
+    "training_rows": 1440,
+    "testing_rows": 360,
+    "mae": 1.476,
+    "rmse": 1.882,
+    "r2": 0.642
+}
